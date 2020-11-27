@@ -36,7 +36,7 @@ public class PatientService {
 	public PatientBean getdataofsinglepatient(Integer id)
 	{
 		PatientBean patientbean = new PatientBean();
-		Patient patient=patientrepo.findOne(id);
+		Patient patient=patientrepo.findById(id).get();
 		patientbean.setMessage("Success");
 		patientbean.setResponse(patient);
 		return patientbean;	

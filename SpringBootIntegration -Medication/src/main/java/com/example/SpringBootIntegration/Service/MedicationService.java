@@ -1,11 +1,11 @@
 package com.example.SpringBootIntegration.Service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-
-import org.json.JSONObject;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,8 @@ import com.example.SpringBootIntegration.entity.Medication;
 import com.example.SpringBootIntegration.entity.MedicationPatientMap;
 import com.example.SpringBootIntegration.repository.MedicationPatientMapRepo;
 import com.example.SpringBootIntegration.repository.MedicationRepo;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+
 
 @Service
 public class MedicationService {
@@ -26,8 +28,9 @@ public class MedicationService {
 	private MedicationRepo medicationrepo;
 	@Autowired
 	private MedicationPatientMapRepo medicationPatientMapRepo;
-	@Autowired 
-	private RestTemplate restTemplate;
+
+	@Autowired
+	DiscoveryClient discoveryClient;
 	
 	public Iterable<Medication> getMedicationdatalist(Integer patientid)
 	{
@@ -57,13 +60,23 @@ public class MedicationService {
 	
 	public Integer callmicroservice(String patientname)
 	{
-		PatientBean patientbean = new PatientBean();
+		List<ServiceInstance> list =
+				discoveryClient.getInstances("patient-service");
+		ServiceInstance service2 = list.get(0);
+		URI micro2URI = service2.getUri();
+		PatientBean micro2Response = new
+				RestTemplate().postForObject(micro2URI +
+				"/patient-service/getfrompatientname", null, PatientBean.class);
+		return micro2Response.getId();
+
+
+		/*PatientBean patientbean = new PatientBean();
 		patientbean.setName(patientname);
 		ResponseEntity<PatientBean> responseEntity = 
 				   new RestTemplate().getForEntity(
 				        "http://127.0.0.1:8003/getfrompatientname", PatientBean.class,  patientbean);
 		//PatientBean jsonObject = restTemplate.exchange("http://127.0.0.1:8003/", HttpMethod.POST, 	patientbean, PatientBean.class).getBody(); 
-		return responseEntity.getBody().getId(); 
+		return responseEntity.getBody().getId(); */
 		
 		//ResponseEntity<CurrencyConversionBean> responseEntity = 
 				   //new RestTemplate().getForEntity(
