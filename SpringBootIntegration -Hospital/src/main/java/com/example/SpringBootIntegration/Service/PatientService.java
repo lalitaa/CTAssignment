@@ -31,39 +31,23 @@ public class PatientService {
 	@Autowired
 	DiscoveryClient discoveryClient;
 	
-	/*.          Get all patients in a hospital.        
-	3.          Get patient by id. */
 
-	
-	public Iterable<Patient> getPatientdatalist(Integer patientid)
+	public Iterable<Patient> getPatientsByhospitalid(Integer hospitalid)
 	{
 		//Patient Patient=null;
-		Iterable<Patient> patientlist=patientrepo.getPatientforpatient(patientid); 
+		List<Patient> patientlist=patientrepo.getpatientsforhospital(hospitalid);
 		return patientlist;
 	}
 	
-	public Iterable<Patient> getPatientdatalistbypatientname(String hospitalId)
+	public Patient getPatientdatalistbypatientid(Integer patientId)
 	{
-		
-		//Patient Patient=null;
-		//Integer patientId = callmicroservice(patientname);
-		Iterable<Patient> Patientlist=patientrepo.getPatientforpatient(patientId); 
+		Patient Patientlist=patientrepo.findById(patientId).get();
 		return Patientlist;
 	}
 	
 
 	
-	public Integer callmicroservice(String patientname)
-	{
-		List<ServiceInstance> list =
-				discoveryClient.getInstances("patient-service");
-		ServiceInstance service2 = list.get(0);
-		URI micro2URI = service2.getUri();
-		PatientBean micro2Response = new
-				RestTemplate().postForObject(micro2URI +
-				"/patient-service/getfrompatientname", null, PatientBean.class);
-		return micro2Response.getId();
-	}
+
 	
 	
 	

@@ -11,10 +11,8 @@ import org.springframework.data.repository.query.Param;
 import com.example.SpringBootIntegration.entity.*;
 
 public interface PatientRepo extends JpaRepository<Patient, Integer>{
- //public List<Patient> findAll(org.springframework.data.domain.Example.of(Patient));
- //public Optional<List<Patient>> findById(Integer id);
-	
-	@Query(value="SELECT * FROM patient where id in (select medication_id from medication_patient_map where patient_id=:patientid)",nativeQuery=true)
-	public List<Patient> getmedicationforpatient(@Param("patientid") Integer patientid );
+
+	@Query(value="SELECT * FROM patient where patient_id in (select patient_id from patient_hospital_map where hospital_id=:hospitalid)",nativeQuery=true)
+	public List<Patient> getpatientsforhospital(@Param("hospitalid") Integer hospitalid );
 
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.SpringBootIntegration.POJO.PatientBean;
 import com.example.SpringBootIntegration.Service.PatientService;
 import com.example.SpringBootIntegration.entity.Patient;
-import com.example.SpringBootIntegration.entity.PatientPatientMap;
 
 @RestController
 public class PatientController {
@@ -18,24 +17,18 @@ public class PatientController {
 	
 	//Create REST API's to Save, update, get Patients for a particular patient. 
 	
-	@GetMapping("/getPatientslist")
-	public Iterable<Patient> getPatientdata(@RequestParam(value = "id", defaultValue = "1") Integer patientid) {
-		Iterable<Patient> Patientlist = Patientservice.getPatientdatalist(patientid);
+	@GetMapping("/getPatientslistbyhospitalid")
+	public Iterable<Patient> getPatientslistbyhospitalid(@RequestParam(value = "hospitalid") Integer hospitalid) {
+		Iterable<Patient> Patientlist = Patientservice.getPatientsByhospitalid(hospitalid);
 		return Patientlist;
 	}
+
 	
-	@PostMapping("/saveUpdatePatient")
-	public PatientBean saveupdatePatient(@RequestBody PatientPatientMap PatientPatientMap)
+	@GetMapping("/getPatientdatalistbyid")
+	public Patient getPatientdatalistbyid(@RequestParam(value = "patientid") Integer patientid)
 	{
-		PatientBean Patientbean = Patientservice.saveupdatePatient(PatientPatientMap);
-		return Patientbean;
-	}
-	
-	@GetMapping("/getPatientdatalistbypatientname")
-	public Iterable<Patient> getPatientdatalistbypatientname(@RequestParam(value = "patientname") String patientname)
-	{
-		Iterable<Patient> Patientbeanlist = Patientservice.getPatientdatalistbypatientname(patientname);
-		return Patientbeanlist;
+		Patient patient = Patientservice.getPatientdatalistbypatientid(patientid);
+		return patient;
 	}
 	
 	

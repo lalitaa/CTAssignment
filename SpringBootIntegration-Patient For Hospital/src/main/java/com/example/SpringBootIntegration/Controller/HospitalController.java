@@ -1,4 +1,5 @@
 package com.example.SpringBootIntegration.Controller;
+import com.example.SpringBootIntegration.POJO.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,9 @@ import com.example.SpringBootIntegration.POJO.HospitalBean;
 import com.example.SpringBootIntegration.Service.HospitalService;
 import com.example.SpringBootIntegration.entity.Hospital;
 
+import java.util.HashMap;
+import java.util.List;
+
 @RestController
 public class HospitalController {
 	@Autowired
@@ -20,13 +24,17 @@ public class HospitalController {
 		Iterable<Hospital> Hospitallist = hospitalservice.getHospitaldatalist();
 		return Hospitallist;
 	}
-	
-	
-	
 	@GetMapping("/getdataofsingleHospital")
 	public HospitalBean saveupdateHospital(@RequestParam(value = "id", defaultValue = "1") Integer hospitalid)
 	{
 		HospitalBean Hospitalbean = hospitalservice.getdataofsingleHospital(hospitalid);
+		return Hospitalbean;
+	}
+
+	@GetMapping("/getallpatientshospitalwise")
+	public HashMap<Integer, List<Patient>> getallpatienthospitalwise()
+	{
+		HashMap<Integer, List<Patient>> Hospitalbean = hospitalservice.getallpatienthospitalwise();
 		return Hospitalbean;
 	}
 	
